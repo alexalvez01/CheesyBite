@@ -95,6 +95,25 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
     }
   }, [cartCount])
 
+  // Desplazamiento automático y suave a la sección al navegar desde otra página con hash (#nosotros, #contacto, etc.)
+  useEffect(() => {
+    if (pathname === '/' && typeof window !== 'undefined') {
+      const hash = window.location.hash
+      if (hash) {
+        const id = hash.replace('#', '')
+        const timer = setTimeout(() => {
+          const el = document.getElementById(id)
+          if (el) {
+            const navHeight = 70
+            const targetY = el.getBoundingClientRect().top + window.scrollY - navHeight
+            window.scrollTo({ top: targetY, behavior: 'smooth' })
+          }
+        }, 150)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [pathname])
+
   const handleLinkClick = (e: React.MouseEvent, link: (typeof navLinks)[number]) => {
     if (link.key === 'menu') {
       if (pathname === '/menu') {

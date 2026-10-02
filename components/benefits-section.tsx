@@ -59,10 +59,10 @@ export function BenefitsSection() {
     threshold: 0.2,
   })
 
-  // Observador con rootMargin negativo para que los items esperen a que el usuario scrollee bien dentro de la sección
+  // Observador con rootMargin adecuado para mobile y desktop
   const { ref: gridRef, isInView: isGridInView } = useInView({
-    threshold: 0.15,
-    rootMargin: '0px 0px -150px 0px',
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px',
   })
 
   // Los contadores numéricos arrancan justo en el momento en que cada tarjeta impacta
@@ -115,13 +115,13 @@ export function BenefitsSection() {
         {/* Tira editorial de alto impacto que se activa en cascada cuando el usuario scrollea bien adentro */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8 lg:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-900/90 pt-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 lg:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-900/90 pt-4"
         >
           {items.map((item) => {
             return (
               <div
                 key={item.title}
-                className="flex flex-col items-center text-center px-4 pt-8 sm:pt-0 group cursor-default"
+                className="flex flex-col items-center text-center px-4 pt-6 pb-8 sm:py-0 group cursor-default"
               >
                 {/* Contenedor métrica con el queso cheddar derretido naciendo directamente de su base */}
                 <div

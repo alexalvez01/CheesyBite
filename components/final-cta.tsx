@@ -31,25 +31,26 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
   }
 
   return (
-    <section id="contacto" className="relative w-full overflow-hidden bg-[#F5B900] text-[#0D0D0D]">
+    <section id="contacto" className="relative w-full overflow-hidden bg-[#0D0D0D] text-[#0D0D0D]">
       {/* Ondulaciones orgánicas superiores con dirección ascendente en ambos bordes laterales (calcado de mockup.png) */}
-      <div className="w-full overflow-hidden leading-none -mt-1 select-none pointer-events-none">
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none -mb-px">
         <svg
           viewBox="0 0 1440 110"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          className="w-full h-14 sm:h-20 lg:h-24 block text-[#0D0D0D]"
+          className="w-full h-14 sm:h-20 lg:h-24 block text-[#F5B900]"
           aria-hidden="true"
         >
           <path
-            d="M 0,0 L 0,35 C 45,65 100,85 180,85 C 280,85 340,20 450,20 C 580,20 700,82 860,82 C 1050,82 1280,25 1440,25 L 1440,0 Z"
+            d="M 0,35 C 45,65 100,85 180,85 C 280,85 340,20 450,20 C 580,20 700,82 860,82 C 1050,82 1280,25 1440,25 L 1440,110 L 0,110 Z"
             fill="currentColor"
           />
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+      <div className="w-full bg-[#F5B900]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6">
           {/* Izquierda: Logo y mascota CheesyBite */}
           <div className="shrink-0 flex items-center justify-center">
@@ -206,19 +207,20 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Ondulación orgánica inferior continua y fluida con curva ascendente en ambas esquinas */}
-      <div className="w-full overflow-hidden leading-none -mb-1 select-none pointer-events-none">
+      <div className="w-full overflow-hidden leading-none select-none pointer-events-none -mt-px">
         <svg
           viewBox="0 0 1440 60"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          className="w-full h-8 sm:h-12 lg:h-14 block text-[#0D0D0D]"
+          className="w-full h-8 sm:h-12 lg:h-14 block text-[#F5B900]"
           aria-hidden="true"
         >
           <path
-            d="M 0,60 L 1440,60 L 1440,16 C 1200,44 960,60 720,60 C 480,60 240,44 0,16 Z"
+            d="M 0,0 L 1440,0 L 1440,16 C 1200,44 960,60 720,60 C 480,60 240,44 0,16 Z"
             fill="currentColor"
           />
         </svg>

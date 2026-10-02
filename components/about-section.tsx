@@ -372,7 +372,7 @@ export function AboutSection() {
   return (
     <section
       id="nosotros"
-      className="relative py-20 sm:py-28 lg:py-36 select-none w-full"
+      className="relative py-20 sm:py-28 lg:py-36 select-none w-full overflow-x-clip"
     >
       {/* =========================================================
           BLOQUE SUPERIOR: CHEF, HISTORIA Y DOODLE (Centrado)
@@ -465,7 +465,7 @@ export function AboutSection() {
             <div className="overflow-visible">
               <h2
                 className={`
-                  text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white leading-[1.08] tracking-tight
+                  text-3xl sm:text-5xl lg:text-6xl font-display font-black text-white leading-[1.08] tracking-tight
                   ${isHeroInView ? 'animate-bounce-title-1' : 'opacity-0'}
                 `}
               >
@@ -475,7 +475,7 @@ export function AboutSection() {
             <div className="overflow-visible">
               <span
                 className={`
-                  inline-block text-4xl sm:text-5xl lg:text-6xl font-display font-black text-cheesy-yellow leading-[1.08] tracking-tight
+                  inline-block text-3xl sm:text-5xl lg:text-6xl font-display font-black text-cheesy-yellow leading-[1.08] tracking-tight
                   ${isHeroInView ? 'animate-bounce-title-2' : 'opacity-0'}
                 `}
               >
@@ -501,7 +501,7 @@ export function AboutSection() {
               - Pegado al párrafo y desplazado a la derecha
               - Línea curva y corazón sincronizados al terminar de escribir
           ===================================================== */}
-          <div className="w-full flex justify-end mt-0 sm:mt-1 translate-x-4 sm:translate-x-8 lg:translate-x-12">
+          <div className="w-full flex justify-end mt-0 sm:mt-1 translate-x-0 sm:translate-x-8 lg:translate-x-12">
             <HandwrittenBadge isTriggered={isHeroInView} />
           </div>
         </div>
