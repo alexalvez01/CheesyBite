@@ -1,6 +1,9 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 interface LogoProps {
   variant?: 'nav' | 'footer'
@@ -9,10 +12,19 @@ interface LogoProps {
 
 export function Logo({ variant = 'nav', className = '' }: LogoProps) {
   const isFooter = variant === 'footer'
+  const pathname = usePathname()
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
 
   return (
     <Link
-      href="/"
+      href="/#inicio"
+      onClick={handleClick}
       className={`inline-flex items-center transition-transform duration-200 hover:scale-105 active:scale-95 ${className}`}
       aria-label="CheesyBite - Volver al inicio"
     >

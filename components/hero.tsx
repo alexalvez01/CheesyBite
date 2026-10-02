@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { CheddarHeroWaveBottom } from './doodles'
 
@@ -10,6 +11,7 @@ interface HeroProps {
 }
 
 export function Hero({ onQuickOrder }: HeroProps) {
+  const router = useRouter()
   const underlinePathRef = useRef<SVGPathElement>(null)
 
   useEffect(() => {
@@ -59,15 +61,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
   }, [])
 
   const handleScrollToMenu = () => {
-    const menuEl = document.getElementById('menu')
-    if (menuEl) {
-      menuEl.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      const nosotrosEl = document.getElementById('nosotros')
-      if (nosotrosEl) {
-        nosotrosEl.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
+    router.push('/menu')
   }
 
   return (
@@ -459,7 +453,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
             </div>
 
             <span className="relative z-10" style={{ fontFamily: 'var(--font-sans), sans-serif' }}>
-              Ver menú
+              Hacer pedido
             </span>
 
             <ArrowRight

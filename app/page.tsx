@@ -30,7 +30,7 @@ export default function CheesyBiteLanding() {
         <BenefitsSection />
 
         {/* Final Conversion Banner */}
-        <FinalCTA onQuickOrder={() => setCartOpen(true)} />
+        <FinalCTA cart={cart} onQuickOrder={() => setCartOpen(true)} />
       </main>
 
       {/* Footer */}
