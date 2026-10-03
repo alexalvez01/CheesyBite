@@ -85,6 +85,9 @@ export default function MenuPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [justAddedId, setJustAddedId] = useState<number | null>(null)
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
   const [explodingCategory, setExplodingCategory] = useState<CategoryFilter | null>(null)
   const filterContainerRef = useRef<HTMLDivElement>(null)
   const indicatorRef = useRef<HTMLDivElement>(null)
@@ -94,6 +97,28 @@ export default function MenuPage() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Detección de scroll horizontal para los degradés de aviso en los filtros mobile
+  useEffect(() => {
+    const el = filterContainerRef.current
+    if (!el) return
+
+    const updateScrollGradients = () => {
+      setCanScrollLeft(el.scrollLeft > 6)
+      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 6)
+    }
+
+    updateScrollGradients()
+    const timer = setTimeout(updateScrollGradients, 100)
+    el.addEventListener('scroll', updateScrollGradients, { passive: true })
+    window.addEventListener('resize', updateScrollGradients)
+
+    return () => {
+      clearTimeout(timer)
+      el.removeEventListener('scroll', updateScrollGradients)
+      window.removeEventListener('resize', updateScrollGradients)
+    }
+  }, [mounted])
 
   // Sincronización de posición del indicador en carga inicial y redimensionamiento
   useEffect(() => {
@@ -124,6 +149,10 @@ export default function MenuPage() {
     const container = filterContainerRef.current
 
     setActiveCategory(category)
+
+    if (toButton) {
+      toButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    }
 
     if (!toButton || !indicator || !container) return
 
@@ -225,72 +254,96 @@ export default function MenuPage() {
 
         {/* Selector de categorías al estilo CheesyBite con indicador de queso cheddar derretido */}
         <div className="mb-12 flex items-center justify-center">
-          <div
-            ref={filterContainerRef}
-            role="tablist"
-            aria-label="Categorías del menú"
-            className="relative flex items-center justify-start sm:justify-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 px-2 w-full max-w-2xl"
-          >
-            {/* Fondo activo con forma artesanal realista de queso cheddar derretido */}
+          <div className="relative w-full max-w-2xl">
+            {/* Degradé indicador izquierdo (avisa que hay más filtros a la izquierda al scrollear) */}
             <div
-              ref={indicatorRef}
               aria-hidden="true"
-              className="absolute pointer-events-none z-0 transition-opacity duration-300"
-              style={{ opacity: 0 }}
+              className={`absolute left-0 top-0 bottom-0 w-8 sm:w-10 pointer-events-none z-20 transition-opacity duration-300 ${
+                canScrollLeft ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                background: 'linear-gradient(to right, #0D0D0D 20%, rgba(13, 13, 13, 0) 100%)',
+              }}
+            />
+
+            {/* Degradé indicador derecho (avisa que hay más filtros a la derecha al scrollear) */}
+            <div
+              aria-hidden="true"
+              className={`absolute right-0 top-0 bottom-0 w-8 sm:w-10 pointer-events-none z-20 transition-opacity duration-300 ${
+                canScrollRight ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                background: 'linear-gradient(to left, #0D0D0D 20%, rgba(13, 13, 13, 0) 100%)',
+              }}
+            />
+
+            <div
+              ref={filterContainerRef}
+              role="tablist"
+              aria-label="Categorías del menú"
+              className="relative flex items-center justify-start sm:justify-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2 px-2 w-full"
             >
-              <svg
-                viewBox="0 0 120 48"
-                preserveAspectRatio="none"
-                className="w-full h-full"
+              {/* Fondo activo con forma artesanal realista de queso cheddar derretido */}
+              <div
+                ref={indicatorRef}
+                aria-hidden="true"
+                className="absolute pointer-events-none z-0 transition-opacity duration-300"
+                style={{ opacity: 0 }}
               >
-                <path
-                  d={CHEDDAR_PATHS[activeCategory] ?? CHEDDAR_PATHS.Todas}
-                  fill="#F5B900"
-                />
-              </svg>
-            </div>
-
-            {CATEGORIES.map((category) => {
-              const isActive = activeCategory === category
-              const isExploding = explodingCategory === category
-              return (
-                <button
-                  key={category}
-                  ref={(el) => {
-                    buttonRefs.current[category] = el
-                  }}
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => handleCategoryClick(category)}
-                  className={`relative z-10 whitespace-nowrap px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold transition-colors duration-300 cursor-pointer ${
-                    isActive
-                      ? 'text-cheesy-black'
-                      : 'text-neutral-400 hover:text-white'
-                  }`}
+                <svg
+                  viewBox="0 0 120 48"
+                  preserveAspectRatio="none"
+                  className="w-full h-full"
                 >
-                  {/* Explosión suave de partículas amarillas de cheddar al activarse */}
-                  {isExploding && (
-                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-30">
-                      {FILTER_EXPLOSION_PARTICLES.map((p, i) => (
-                        <span
-                          key={i}
-                          className="absolute rounded-full bg-cheesy-yellow animate-particle shadow-[0_0_8px_#F5B900]"
-                          style={{
-                            width: `${p.size}px`,
-                            height: `${p.size}px`,
-                            '--tx': `${p.x}px`,
-                            '--ty': `${p.y}px`,
-                            animationDelay: `${p.delay}ms`,
-                          } as React.CSSProperties}
-                        />
-                      ))}
-                    </div>
-                  )}
+                  <path
+                    d={CHEDDAR_PATHS[activeCategory] ?? CHEDDAR_PATHS.Todas}
+                    fill="#F5B900"
+                  />
+                </svg>
+              </div>
 
-                  <span className="relative z-10">{category}</span>
-                </button>
-              )
-            })}
+              {CATEGORIES.map((category) => {
+                const isActive = activeCategory === category
+                const isExploding = explodingCategory === category
+                return (
+                  <button
+                    key={category}
+                    ref={(el) => {
+                      buttonRefs.current[category] = el
+                    }}
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => handleCategoryClick(category)}
+                    className={`relative z-10 whitespace-nowrap px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold transition-colors duration-300 cursor-pointer ${
+                      isActive
+                        ? 'text-cheesy-black'
+                        : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    {/* Explosión suave de partículas amarillas de cheddar al activarse */}
+                    {isExploding && (
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-30">
+                        {FILTER_EXPLOSION_PARTICLES.map((p, i) => (
+                          <span
+                            key={i}
+                            className="absolute rounded-full bg-cheesy-yellow animate-particle shadow-[0_0_8px_#F5B900]"
+                            style={{
+                              width: `${p.size}px`,
+                              height: `${p.size}px`,
+                              '--tx': `${p.x}px`,
+                              '--ty': `${p.y}px`,
+                              animationDelay: `${p.delay}ms`,
+                            } as React.CSSProperties}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    <span className="relative z-10">{category}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
 
@@ -310,84 +363,201 @@ export default function MenuPage() {
                   setMousePos({ x: e.clientX, y: e.clientY })
                 }}
                 onMouseLeave={() => setHoveredProduct(null)}
-                className="group py-4.5 px-3 sm:px-4 transition-colors duration-200 hover:bg-neutral-900/30 rounded-xl cursor-default"
+                className="group py-4 px-2 sm:px-4 transition-colors duration-200 hover:bg-neutral-900/30 rounded-xl cursor-default"
               >
-                {/* Fila principal: Nombre ········································ Precio + Botón */}
-                <div className="flex items-baseline justify-between gap-2 sm:gap-4">
-                  {/* Nombre y Badge */}
-                  <div className="flex items-center gap-2.5 shrink-0">
-                    <h2
-                      className={`font-display font-bold text-lg sm:text-2xl transition-colors ${
-                        isHovered ? 'text-cheesy-yellow' : 'text-white group-hover:text-cheesy-yellow'
-                      }`}
-                    >
-                      {product.name}
-                    </h2>
-                    {product.badge && (
-                      <span className="text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full bg-cheesy-yellow text-cheesy-black font-display tracking-wider">
-                        {product.badge}
+                {/* =========================================
+                    VISTA MOBILE (lg:hidden): Bento horizontal con foto y borde cheddar
+                    ========================================= */}
+                <div className="flex items-center justify-between gap-3.5 lg:hidden">
+                  {/* Información a la izquierda */}
+                  <div className="flex-1 min-w-0 pr-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="font-display font-bold text-lg text-white group-hover:text-cheesy-yellow transition-colors leading-tight">
+                        {product.name}
+                      </h2>
+                      {product.badge && (
+                        <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-cheesy-yellow text-cheesy-black font-display tracking-wider">
+                          {product.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="mt-1 text-xs text-neutral-400 line-clamp-2 leading-relaxed">
+                      {product.description}
+                    </p>
+
+                    <div className="mt-2.5 flex items-center justify-between">
+                      <span className="font-display font-black text-lg text-cheesy-yellow tracking-tight">
+                        {formatPrice(product.price)}
                       </span>
-                    )}
+
+                      {/* Botón interactivo de agregar */}
+                      <div className="relative flex items-center justify-center">
+                        {justAddedId === product.id && (
+                          <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-30">
+                            {BURST_PARTICLES.map((p, i) => (
+                              <span
+                                key={i}
+                                className="absolute rounded-full bg-cheesy-yellow animate-particle shadow-[0_0_8px_#F5B900]"
+                                style={{
+                                  width: `${p.size}px`,
+                                  height: `${p.size}px`,
+                                  '--tx': `${p.x}px`,
+                                  '--ty': `${p.y}px`,
+                                  animationDelay: `${p.delay}ms`,
+                                } as React.CSSProperties}
+                              />
+                            ))}
+                            <span className="absolute -inset-1.5 rounded-full border-2 border-cheesy-yellow/80 animate-ping pointer-events-none" />
+                          </div>
+                        )}
+
+                        <button
+                          onClick={() => handleAddProduct(product)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md group/btn relative z-10 ${
+                            justAddedId === product.id
+                              ? 'bg-cheesy-yellow text-cheesy-black scale-110 shadow-[0_0_20px_rgba(245,185,0,0.5)]'
+                              : 'bg-neutral-900 border border-neutral-700/80 text-neutral-300 hover:border-cheesy-yellow hover:bg-cheesy-yellow hover:text-cheesy-black active:scale-95'
+                          }`}
+                          aria-label={`Agregar ${product.name} al carrito`}
+                        >
+                          {justAddedId === product.id ? (
+                            <Check className="w-4 h-4 stroke-3 animate-pop text-cheesy-black" />
+                          ) : (
+                            <Plus className="w-4 h-4 stroke-2.5" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Línea punteada tradicional */}
-                  <div
-                    className={`flex-1 mx-2 sm:mx-4 border-b-2 border-dotted self-baseline mb-1 sm:mb-1.5 transition-colors ${
-                      isHovered ? 'border-cheesy-yellow/60' : 'border-neutral-700/60 group-hover:border-cheesy-yellow/40'
-                    }`}
-                  />
-
-                  {/* Precio y Botón circular interactivo con explosión de partículas */}
-                  <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
-                    <span className="font-display font-black text-lg sm:text-2xl text-cheesy-yellow tracking-tight">
-                      {formatPrice(product.price)}
-                    </span>
-
-                    <div className="relative flex items-center justify-center">
-                      {/* Partículas disparadas al agregar al carrito */}
-                      {justAddedId === product.id && (
-                        <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-30">
-                          {BURST_PARTICLES.map((p, i) => (
-                            <span
-                              key={i}
-                              className="absolute rounded-full bg-cheesy-yellow animate-particle shadow-[0_0_8px_#F5B900]"
-                              style={{
-                                width: `${p.size}px`,
-                                height: `${p.size}px`,
-                                '--tx': `${p.x}px`,
-                                '--ty': `${p.y}px`,
-                                animationDelay: `${p.delay}ms`,
-                              } as React.CSSProperties}
-                            />
-                          ))}
-                          {/* Onda expansiva de resplandor */}
-                          <span className="absolute -inset-1.5 rounded-full border-2 border-cheesy-yellow/80 animate-ping pointer-events-none" />
-                        </div>
-                      )}
-
-                      <button
-                        onClick={() => handleAddProduct(product)}
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md group/btn relative z-10 ${
-                          justAddedId === product.id
-                            ? 'bg-cheesy-yellow text-cheesy-black scale-110 shadow-[0_0_20px_rgba(245,185,0,0.5)]'
-                            : 'bg-neutral-900 border border-neutral-700/80 text-neutral-300 hover:border-cheesy-yellow hover:bg-cheesy-yellow hover:text-cheesy-black hover:scale-105 active:scale-95'
-                        }`}
-                        aria-label={`Agregar ${product.name} al carrito`}
+                  {/* Foto a la derecha estilo Polaroid artesanal con cinta masking tape (idéntica a desktop) */}
+                  <div className="shrink-0 relative w-20 sm:w-24 pt-2.5">
+                    <div
+                      className="relative bg-cheesy-card p-1.5 pb-2.5 rounded-xs shadow-[0_10px_25px_rgba(0,0,0,0.85)] border border-[#2E2E2E] transition-transform duration-300 group-hover:scale-105"
+                      style={{
+                        transform: `rotate(${ROTATION_ANGLES[product.id] ?? 2}deg)`,
+                      }}
+                    >
+                      {/* Cinta masking tape realista con bordes rasgados a mano y textura crepé */}
+                      <div
+                        aria-hidden="true"
+                        className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-12 sm:w-14 h-4.5 z-20 pointer-events-none select-none"
+                        style={{
+                          filter: 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6))',
+                        }}
                       >
-                        {justAddedId === product.id ? (
-                          <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-3 animate-pop text-cheesy-black" />
-                        ) : (
-                          <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-2.5 transition-transform duration-200 group-hover/btn:rotate-90" />
-                        )}
-                      </button>
+                        <div
+                          className="w-full h-full backdrop-blur-[1px] border-t border-white/40 border-b"
+                          style={{
+                            background: `repeating-linear-gradient(
+                              115deg,
+                              rgba(240, 232, 210, 0.9),
+                              rgba(240, 232, 210, 0.9) 2px,
+                              rgba(228, 217, 192, 0.9) 3px,
+                              rgba(240, 232, 210, 0.9) 5px
+                            )`,
+                            clipPath: `polygon(
+                              0% 15%, 3% 0%, 1% 25%, 4% 45%, 1% 65%, 4% 85%, 0% 100%,
+                              96% 100%, 100% 80%, 97% 60%, 100% 40%, 96% 20%, 99% 5%, 95% 0%
+                            )`,
+                            transform: 'rotate(-2deg)',
+                          }}
+                        />
+                      </div>
+
+                      {/* Contenedor de la foto */}
+                      <div className="relative aspect-square w-full bg-neutral-950 overflow-hidden rounded-xs border border-neutral-800/80">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 640px) 80px, 96px"
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Descripción de los ingredientes */}
-                <p className="mt-1 text-xs sm:text-sm text-neutral-400 font-normal leading-relaxed max-w-xl pr-4">
-                  {product.description}
-                </p>
+                {/* =========================================
+                    VISTA DESKTOP (hidden lg:block): Fila clásica con línea punteada
+                    ========================================= */}
+                <div className="hidden lg:block">
+                  <div className="flex items-baseline justify-between gap-4">
+                    {/* Nombre y Badge */}
+                    <div className="flex items-center gap-2.5 shrink-0">
+                      <h2
+                        className={`font-display font-bold text-2xl transition-colors ${
+                          isHovered ? 'text-cheesy-yellow' : 'text-white group-hover:text-cheesy-yellow'
+                        }`}
+                      >
+                        {product.name}
+                      </h2>
+                      {product.badge && (
+                        <span className="text-xs font-black uppercase px-2 py-0.5 rounded-full bg-cheesy-yellow text-cheesy-black font-display tracking-wider">
+                          {product.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Línea punteada tradicional */}
+                    <div
+                      className={`flex-1 mx-4 border-b-2 border-dotted self-baseline mb-1.5 transition-colors ${
+                        isHovered ? 'border-cheesy-yellow/60' : 'border-neutral-700/60 group-hover:border-cheesy-yellow/40'
+                      }`}
+                    />
+
+                    {/* Precio y Botón circular interactivo con explosión de partículas */}
+                    <div className="flex items-center gap-4 shrink-0">
+                      <span className="font-display font-black text-2xl text-cheesy-yellow tracking-tight">
+                        {formatPrice(product.price)}
+                      </span>
+
+                      <div className="relative flex items-center justify-center">
+                        {justAddedId === product.id && (
+                          <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-30">
+                            {BURST_PARTICLES.map((p, i) => (
+                              <span
+                                key={i}
+                                className="absolute rounded-full bg-cheesy-yellow animate-particle shadow-[0_0_8px_#F5B900]"
+                                style={{
+                                  width: `${p.size}px`,
+                                  height: `${p.size}px`,
+                                  '--tx': `${p.x}px`,
+                                  '--ty': `${p.y}px`,
+                                  animationDelay: `${p.delay}ms`,
+                                } as React.CSSProperties}
+                              />
+                            ))}
+                            <span className="absolute -inset-1.5 rounded-full border-2 border-cheesy-yellow/80 animate-ping pointer-events-none" />
+                          </div>
+                        )}
+
+                        <button
+                          onClick={() => handleAddProduct(product)}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md group/btn relative z-10 ${
+                            justAddedId === product.id
+                              ? 'bg-cheesy-yellow text-cheesy-black scale-110 shadow-[0_0_20px_rgba(245,185,0,0.5)]'
+                              : 'bg-neutral-900 border border-neutral-700/80 text-neutral-300 hover:border-cheesy-yellow hover:bg-cheesy-yellow hover:text-cheesy-black hover:scale-105 active:scale-95'
+                          }`}
+                          aria-label={`Agregar ${product.name} al carrito`}
+                        >
+                          {justAddedId === product.id ? (
+                            <Check className="w-5 h-5 stroke-3 animate-pop text-cheesy-black" />
+                          ) : (
+                            <Plus className="w-5 h-5 stroke-2.5 transition-transform duration-200 group-hover/btn:rotate-90" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Descripción de los ingredientes */}
+                  <p className="mt-1 text-sm text-neutral-400 font-normal leading-relaxed max-w-xl pr-4">
+                    {product.description}
+                  </p>
+                </div>
               </article>
             )
           })}

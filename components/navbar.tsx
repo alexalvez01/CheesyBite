@@ -138,10 +138,10 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b transition-[background-color,border-color,padding,box-shadow] duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,padding,box-shadow] duration-300 ${
         isScrolled || mobileMenuOpen
-          ? 'bg-cheesy-black/95 backdrop-blur-md border-neutral-800/80 py-2 shadow-xl shadow-black/40'
-          : 'bg-linear-to-b from-cheesy-black/90 via-cheesy-black/50 to-transparent border-transparent py-2.5 sm:py-3'
+          ? 'bg-cheesy-black/95 backdrop-blur-md border-b border-neutral-800/80 py-2 shadow-xl shadow-black/40'
+          : 'bg-linear-to-b from-cheesy-black/90 via-cheesy-black/50 to-transparent py-2.5 sm:py-3'
       }`}
     >
       <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8">
@@ -213,7 +213,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-cheesy-black/95 backdrop-blur-md border-b border-neutral-800/80 px-6 py-5 shadow-2xl transition-all animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="md:hidden bg-cheesy-black/95 backdrop-blur-md px-6 py-5 shadow-2xl transition-all animate-in fade-in slide-in-from-top-4 duration-200">
           <nav className="flex flex-col gap-4 text-base font-medium">
             {navLinks.map((link) => (
               <Link
@@ -223,7 +223,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
                   handleLinkClick(e, link)
                   setMobileMenuOpen(false)
                 }}
-                className={`py-2 border-b border-neutral-800/60 transition-colors cursor-pointer ${
+                className={`py-2 border-b border-neutral-800/60 last:border-b-0 transition-colors cursor-pointer ${
                   isLinkActive(link.key)
                     ? 'text-cheesy-yellow font-bold'
                     : 'text-neutral-200 hover:text-cheesy-yellow'

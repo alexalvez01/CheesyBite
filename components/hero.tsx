@@ -367,15 +367,15 @@ export function Hero({ onQuickOrder }: HeroProps) {
             className="
               group
               relative
-              mt-4
+              mt-5
               inline-flex
               items-center
-              gap-2
+              gap-2.5
               rounded-b-md
               bg-cheesy-yellow
-              px-5
-              py-2.5
-              text-xs
+              px-7
+              py-3.5
+              text-base
               font-bold
               tracking-tight
               text-cheesy-black
@@ -388,7 +388,6 @@ export function Hero({ onQuickOrder }: HeroProps) {
               animate-hero-btn
 
               sm:mt-8
-              sm:gap-2.5
               sm:px-8
               sm:py-3.5
               sm:text-lg

@@ -1,7 +1,20 @@
 'use client'
 
-import React from 'react'
-import { X, Plus, Minus, ArrowRight, Trash2, ShoppingCart } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import {
+  X,
+  Plus,
+  Minus,
+  ArrowRight,
+  Trash2,
+  ShoppingCart,
+  Banknote,
+  CreditCard,
+  Bike,
+  Store,
+  MapPin,
+} from 'lucide-react'
 import { CartItem } from '@/lib/types'
 import { formatPrice, SITE_CONFIG } from '@/lib/data'
 
@@ -20,8 +33,31 @@ export function CartDrawer({
   onUpdateQuantity,
   onRemoveItem,
 }: CartDrawerProps) {
+  const router = useRouter()
+  const [orderType, setOrderType] = useState<'delivery' | 'retirar'>('delivery')
+  const [address, setAddress] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState<'Efectivo' | 'Transferencia'>('Efectivo')
   const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const totalCount = items.reduce((sum, item) => sum + item.quantity, 0)
+
+  useEffect(() => {
+    try {
+      const savedAddress = localStorage.getItem('cheesybite_address')
+      if (savedAddress) setAddress(savedAddress)
+    } catch {}
+  }, [])
+
+  const handleAddressChange = (val: string) => {
+    setAddress(val)
+    try {
+      localStorage.setItem('cheesybite_address', val)
+    } catch {}
+  }
+
+  const handleAddMore = () => {
+    onClose()
+    router.push('/menu')
+  }
 
   const handleCheckoutWhatsApp = () => {
     if (items.length === 0) return
@@ -30,7 +66,12 @@ export function CartDrawer({
       .map((item) => `🍔 ${item.quantity}x ${item.name} (${formatPrice(item.price * item.quantity)})`)
       .join('\n')
 
-    const message = `¡Hola ${SITE_CONFIG.name}! 🍔 Quiero hacer el siguiente pedido:\n\n${itemLines}\n\n💰 Total: ${formatPrice(totalAmount)}\n\n📍 Mi dirección:\n💳 Método de pago:\n\n¡Muchas gracias!`
+    const deliveryLines =
+      orderType === 'delivery'
+        ? `🛵 Entrega: Delivery\n📍 Mi dirección: ${address.trim() || 'A coordinar por chat'}`
+        : '🏪 Entrega: Para retirar por el local'
+
+    const message = `¡Hola ${SITE_CONFIG.name}! 🍔 Quiero hacer el siguiente pedido:\n\n${itemLines}\n\n💰 Total: ${formatPrice(totalAmount)}\n💳 Método de pago: ${paymentMethod}\n${deliveryLines}\n\n¡Muchas gracias!`
 
     const encoded = encodeURIComponent(message)
     window.open(`https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encoded}`, '_blank', 'noopener,noreferrer')
@@ -85,7 +126,7 @@ export function CartDrawer({
                 Elegí tus burgers favoritas del menú y armá tu pedido en unos pocos clics.
               </p>
               <button
-                onClick={onClose}
+                onClick={handleAddMore}
                 className="group relative w-full max-w-xs flex items-center justify-center gap-2.5 pt-4 pb-7 px-6 text-cheesy-black font-sans font-bold text-base transition-transform duration-200 cursor-pointer hover:scale-[1.015] active:scale-[0.98] select-none"
               >
                 {/* Fondo artesanal con forma orgánica de queso cheddar derretido */}
@@ -110,7 +151,120 @@ export function CartDrawer({
               </button>
             </div>
           ) : (
-            <div className="divide-y divide-neutral-800/70">
+            <div>
+              {/* Contenedor de opciones de entrega y pago */}
+              <div className="bg-neutral-900/50 border border-neutral-800/80 rounded-2xl p-4 space-y-4 mb-6">
+                {/* Selector Tipo de entrega */}
+                <div>
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
+                      Forma de entrega
+                    </span>
+                    <span className="text-[11px] text-neutral-500 font-medium">
+                      {orderType === 'delivery' ? 'A tu puerta' : 'Retiro en el local'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 p-1 bg-neutral-950 rounded-xl gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setOrderType('delivery')}
+                      className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer select-none ${
+                        orderType === 'delivery'
+                          ? 'bg-cheesy-yellow text-cheesy-black shadow-[0_2px_8px_rgba(245,185,0,0.25)]'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      <Bike className="w-4 h-4" />
+                      <span>Delivery</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setOrderType('retirar')}
+                      className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer select-none ${
+                        orderType === 'retirar'
+                          ? 'bg-cheesy-yellow text-cheesy-black shadow-[0_2px_8px_rgba(245,185,0,0.25)]'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      <Store className="w-4 h-4" />
+                      <span>Para retirar</span>
+                    </button>
+                  </div>
+
+                  {/* Input de dirección condicional para Delivery */}
+                  {orderType === 'delivery' && (
+                    <div className="mt-2.5 animate-fadeIn">
+                      <label htmlFor="delivery-address" className="sr-only">
+                        Dirección de entrega
+                      </label>
+                      <div className="relative flex items-center">
+                        <MapPin className="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" />
+                        <input
+                          id="delivery-address"
+                          type="text"
+                          value={address}
+                          onChange={(e) => handleAddressChange(e.target.value)}
+                          placeholder="Calle, número, depto o referencia..."
+                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-cheesy-yellow/70 focus:ring-1 focus:ring-cheesy-yellow/50 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-neutral-500 outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Barra de opciones de Método de Pago */}
+                <div>
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans">
+                      Método de pago
+                    </span>
+                    <span className="text-[11px] text-neutral-500 font-medium">
+                      {paymentMethod === 'Efectivo' ? 'Abonás al recibir' : 'Transferís al confirmar'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 p-1 bg-neutral-950 rounded-xl gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('Efectivo')}
+                      className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer select-none ${
+                        paymentMethod === 'Efectivo'
+                          ? 'bg-cheesy-yellow text-cheesy-black shadow-[0_2px_8px_rgba(245,185,0,0.25)]'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      <Banknote className="w-4 h-4" />
+                      <span>Efectivo</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('Transferencia')}
+                      className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer select-none ${
+                        paymentMethod === 'Transferencia'
+                          ? 'bg-cheesy-yellow text-cheesy-black shadow-[0_2px_8px_rgba(245,185,0,0.25)]'
+                          : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span>Transferencia</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Encabezado y divisor de la sección de productos */}
+              <div className="flex items-center gap-3 mb-3 px-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-sans shrink-0">
+                  Detalle del pedido
+                </span>
+                <div className="flex-1 border-b border-neutral-800" />
+              </div>
+
+              {/* Lista de productos */}
+              <div className="divide-y divide-neutral-800/70">
               {items.map((item) => (
                 <div
                   key={item.id}
@@ -172,7 +326,8 @@ export function CartDrawer({
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        )}
         </div>
 
         {/* Drawer Footer */}
@@ -220,6 +375,15 @@ export function CartDrawer({
               </svg>
               <span className="relative z-10">Pedir por WhatsApp</span>
               <ArrowRight className="relative z-10 w-5 h-5 ml-1 transition-transform duration-200 group-hover:translate-x-1" />
+            </button>
+
+            {/* Botón secundario: Agregar más productos */}
+            <button
+              onClick={handleAddMore}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-neutral-700/80 hover:border-cheesy-yellow bg-neutral-800/40 hover:bg-neutral-800 text-neutral-300 hover:text-cheesy-yellow font-sans font-semibold text-sm transition-all duration-200 cursor-pointer active:scale-[0.98]"
+            >
+              <Plus className="w-4 h-4 text-cheesy-yellow" />
+              <span>Agregar más productos</span>
             </button>
           </div>
         )}
