@@ -106,7 +106,6 @@ function HandwrittenBadge({ isTriggered }: HandwrittenBadgeProps) {
 
 interface ScrollPillarBandProps {
   step: string
-  tag: string
   title: string
   description: string
   icon: React.ElementType
@@ -116,7 +115,6 @@ interface ScrollPillarBandProps {
 
 function ScrollPillarBand({
   step,
-  tag,
   title,
   description,
   icon: Icon,
@@ -126,6 +124,8 @@ function ScrollPillarBand({
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const bannerRef = useRef<HTMLDivElement>(null)
+  const stepRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
   const paragraphRef = useRef<HTMLDivElement>(null)
 
   const isLeftToRight = direction === 'left-to-right'
@@ -140,6 +140,13 @@ function ScrollPillarBand({
     if (prefersReducedMotion) {
       if (bannerRef.current) {
         bannerRef.current.style.transform = 'translate3d(0%, 0, 0)'
+      }
+      if (stepRef.current) {
+        stepRef.current.style.opacity = '1'
+        stepRef.current.style.transform = 'translate3d(0, 0, 0)'
+      }
+      if (titleRef.current) {
+        titleRef.current.style.transform = 'translate3d(0, 0, 0) scale(1)'
       }
       if (paragraphRef.current) {
         paragraphRef.current.style.opacity = '1'
@@ -169,26 +176,51 @@ function ScrollPillarBand({
       const rawProgress = distanceTraveled / totalDistance
       const progress = Math.max(0, Math.min(1, rawProgress))
 
-      // Física de desplazamiento suave (smoothstep)
-      const titleProgress = Math.min(1, progress / 0.72)
-      const easedTitle =
-        titleProgress * titleProgress * (3 - 2 * titleProgress)
+      const isDesktop = window.innerWidth >= 640
+      const maxScale = isDesktop ? 1.4 : 1.28
+      const startY = isDesktop ? 36 : 24
+
+      // 1. Desplazamiento horizontal del banner sobre el scroll (llega entre 0 y 0.40)
+      const slideProgress = Math.min(1, progress / 0.40)
+      const easedSlide =
+        slideProgress * slideProgress * (3 - 2 * slideProgress)
 
       let currentXPercent = 0
       if (isLeftToRight) {
-        // Arranca fuera por la izquierda (-100%) y se desliza hacia la derecha hasta 0%
-        currentXPercent = -100 * (1 - easedTitle)
+        currentXPercent = -100 * (1 - easedSlide)
       } else {
-        // Arranca fuera por la derecha (100%) y se desliza hacia la izquierda hasta 0%
-        currentXPercent = 100 * (1 - easedTitle)
+        currentXPercent = 100 * (1 - easedSlide)
       }
 
       bannerRef.current.style.transform = `translate3d(${currentXPercent.toFixed(2)}%, 0, 0)`
 
+      // 2. Título: aparece grande y abajo, y entre 0.38 y 0.68 se achica a 1.0 desplazándose hacia arriba
+      if (titleRef.current) {
+        const settleProgress = Math.max(0, Math.min(1, (progress - 0.38) / 0.30))
+        const easedSettle =
+          settleProgress * settleProgress * (3 - 2 * settleProgress)
+        const currentScale = maxScale - (maxScale - 1) * easedSettle
+        const currentY = (1 - easedSettle) * startY
+
+        titleRef.current.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0) scale(${currentScale.toFixed(3)})`
+      }
+
+      // 2b. Cabecera con número de paso (aparece suave mientras el título sube)
+      if (stepRef.current) {
+        const stepProgress = Math.max(0, Math.min(1, (progress - 0.40) / 0.26))
+        const easedStep =
+          stepProgress * stepProgress * (3 - 2 * stepProgress)
+
+        stepRef.current.style.opacity = easedStep.toFixed(3)
+        stepRef.current.style.transform = `translate3d(0, ${((1 - easedStep) * 10).toFixed(2)}px, 0)`
+      }
+
+      // 3. Párrafo descriptivo: recién cuando el título terminó de acomodarse (a partir de 0.68), aparece el texto
       if (paragraphRef.current) {
-        const pReveal = Math.max(0, Math.min(1, (progress - 0.58) / 0.38))
-        const easedReveal = pReveal * pReveal * (3 - 2 * pReveal)
-        const paragraphY = (1 - easedReveal) * 24
+        const pReveal = Math.max(0, Math.min(1, (progress - 0.68) / 0.27))
+        const easedReveal =
+          pReveal * pReveal * (3 - 2 * pReveal)
+        const paragraphY = (1 - easedReveal) * 20
 
         paragraphRef.current.style.opacity = easedReveal.toFixed(3)
         paragraphRef.current.style.transform = `translate3d(0, ${paragraphY.toFixed(2)}px, 0)`
@@ -223,7 +255,7 @@ function ScrollPillarBand({
   return (
     <div
       ref={containerRef}
-      className="relative h-[115vh] sm:h-[130vh] lg:h-[140vh] w-full"
+      className="relative h-[125vh] sm:h-[140vh] lg:h-[150vh] w-full"
     >
       <div
         ref={stickyRef}
@@ -266,8 +298,15 @@ function ScrollPillarBand({
             >
               {/* Bloque de texto principal */}
               <div className="w-full max-w-[88%] sm:max-w-md lg:max-w-xl text-left">
-                {/* Cabecera del bloque: Paso + Tag */}
-                <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                {/* Cabecera del bloque: Paso */}
+                <div
+                  ref={stepRef}
+                  className="mb-2 sm:mb-3 will-change-[opacity,transform]"
+                  style={{
+                    opacity: 0,
+                    transform: 'translate3d(0, 10px, 0)',
+                  }}
+                >
                   <span
                     className={`font-display font-black text-3xl sm:text-5xl lg:text-6xl tracking-tighter leading-none ${
                       isDark ? 'text-cheesy-yellow/35' : 'text-black/25'
@@ -275,28 +314,23 @@ function ScrollPillarBand({
                   >
                     {step}
                   </span>
-
-                  <span
-                    className={`text-[11px] sm:text-xs font-extrabold uppercase tracking-[0.2em] font-display px-2.5 py-1 rounded-full ${
-                      isDark
-                        ? 'bg-cheesy-yellow/10 text-cheesy-yellow border border-cheesy-yellow/25'
-                        : 'bg-black/10 text-black border border-black/15'
-                    }`}
-                  >
-                    {tag}
-                  </span>
                 </div>
 
-                {/* Título de la sección */}
+                {/* Título de la sección: arranca agrandado y desplazado hacia abajo, luego se achica y sube */}
                 <h4
-                  className={`text-2xl sm:text-4xl lg:text-5xl font-display font-black tracking-tight leading-tight ${
+                  ref={titleRef}
+                  className={`text-2xl sm:text-4xl lg:text-5xl font-display font-black tracking-tight leading-tight origin-top-left will-change-transform ${
                     isDark ? 'text-white' : 'text-[#0A0A0A]'
                   }`}
+                  style={{
+                    transformOrigin: 'left top',
+                    transform: 'translate3d(0, 36px, 0) scale(1.35)',
+                  }}
                 >
                   {title}
                 </h4>
 
-                {/* Párrafo que aparece desde abajo cuando llega al final del trayecto */}
+                {/* Párrafo que aparece recién cuando el título terminó de acomodarse arriba */}
                 <div
                   ref={paragraphRef}
                   className="mt-4 sm:mt-6 will-change-[opacity,transform]"
@@ -336,7 +370,6 @@ export function AboutSection() {
 
   const pillars: Array<{
     step: string
-    tag: string
     icon: React.ElementType
     title: string
     description: string
@@ -345,7 +378,6 @@ export function AboutSection() {
   }> = [
     {
       step: '01',
-      tag: 'Sello Smash',
       icon: Flame,
       title: 'El Blend Smash',
       description:
@@ -355,7 +387,6 @@ export function AboutSection() {
     },
     {
       step: '02',
-      tag: 'Firma de la Casa',
       icon: Sparkles,
       title: 'Cascada de Cheddar',
       description:
@@ -365,7 +396,6 @@ export function AboutSection() {
     },
     {
       step: '03',
-      tag: 'Horneado Matutino',
       icon: ChefHat,
       title: 'Pan de Papa Diario',
       description:
@@ -589,7 +619,6 @@ export function AboutSection() {
             <ScrollPillarBand
               key={pillar.step}
               step={pillar.step}
-              tag={pillar.tag}
               title={pillar.title}
               description={pillar.description}
               icon={pillar.icon}
