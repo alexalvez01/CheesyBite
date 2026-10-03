@@ -23,6 +23,10 @@ const caveatBrush = Caveat_Brush({
 export const metadata: Metadata = {
   title: 'CheesyBite | Burgers con alma',
   description: 'Hamburguesas artesanales, jugosas y con el mejor cheddar. Pedí tu CheesyBite por WhatsApp.',
+  icons: {
+    icon: '/images/icono.png',
+    apple: '/images/icono.png',
+  },
 }
 
 export const viewport: Viewport = {

@@ -158,7 +158,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           max-w-360
           flex-col
           justify-start
-          pt-24
+          pt-20
           px-5
 
           sm:flex-row
@@ -179,7 +179,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
             relative
             z-30
             w-full
-            max-w-[340px]
+            max-w-full
             sm:max-w-155
             lg:max-w-165
             xl:max-w-175
@@ -198,7 +198,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
               <span className="sr-only">Hamburguesas Artesanales</span>
               <svg
                 viewBox="0 0 440 45"
-                className="w-full max-w-72 sm:max-w-97.5 lg:max-w-107.5 h-auto overflow-visible"
+                className="w-full max-w-[80%] sm:max-w-97.5 lg:max-w-107.5 h-auto overflow-visible"
                 aria-hidden="true"
               >
                 <path id="curve-antetitulo" d="M 5 36 Q 200 8 400 32" fill="none" />
@@ -279,7 +279,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
               {/* Título curvado en SVG - "felicidad" y subrayado con remate estilo firma */}
               <svg
                 viewBox="-20 0 580 265"
-                className="w-full max-w-[340px] sm:max-w-140 lg:max-w-155 xl:max-w-165 h-auto overflow-visible select-none drop-shadow-[0_4px_18px_rgba(0,0,0,0.7)] animate-hero-title"
+                className="w-full max-w-full sm:max-w-140 lg:max-w-155 xl:max-w-165 h-auto overflow-visible select-none drop-shadow-[0_4px_18px_rgba(0,0,0,0.7)] animate-hero-title"
                 aria-hidden="true"
               >
                 <defs>
@@ -339,9 +339,9 @@ export function Hero({ onQuickOrder }: HeroProps) {
 
           <p
             className="
-              mt-5
-              max-w-[340px]
-              text-base
+              mt-3
+              max-w-[280px]
+              text-xs
               font-normal
               leading-relaxed
               text-[#D1D0CB]
@@ -367,15 +367,15 @@ export function Hero({ onQuickOrder }: HeroProps) {
             className="
               group
               relative
-              mt-6
+              mt-4
               inline-flex
               items-center
-              gap-2.5
+              gap-2
               rounded-b-md
               bg-cheesy-yellow
-              px-7
-              py-3.5
-              text-base
+              px-5
+              py-2.5
+              text-xs
               font-bold
               tracking-tight
               text-cheesy-black
@@ -388,6 +388,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
               animate-hero-btn
 
               sm:mt-8
+              sm:gap-2.5
               sm:px-8
               sm:py-3.5
               sm:text-lg
@@ -517,13 +518,15 @@ export function Hero({ onQuickOrder }: HeroProps) {
           absolute
           z-10
 
-          bottom-16
+          bottom-0
           left-1/2
           -translate-x-1/2
-          h-[72%]
-          w-[105%]
+          h-[43%]
+          w-[95%]
+          max-w-[370px]
 
           sm:z-20
+          sm:max-w-none
           sm:translate-x-0
           sm:left-auto
           sm:bottom-2
@@ -568,7 +571,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
         className="
           pointer-events-none select-none
           absolute z-20
-          top-[60%] right-[70%]
+          hidden sm:block
           sm:top-[22%] sm:right-[48%]
           lg:top-[19%] lg:right-[49%]
           xl:top-[17%] xl:right-[48%]
@@ -619,7 +622,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
         className="
           pointer-events-none select-none animate-hero-badge
           absolute z-20
-          top-[58%] right-[2%]
+          hidden sm:block
           sm:top-[18%] sm:right-[8%]
           lg:top-[16%] lg:right-[10%]
           xl:top-[14%] xl:right-[11%]

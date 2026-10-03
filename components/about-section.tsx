@@ -325,8 +325,14 @@ function ScrollPillarBand({
 }
 
 export function AboutSection() {
-  const { ref: heroRef, isInView: isHeroInView } = useInView({ threshold: 0.15 })
-  const { ref: pillarsRef, isInView: isPillarsInView } = useInView({ threshold: 0.15 })
+  const { ref: heroRef, isInView: isHeroInView } = useInView({
+    threshold: 0.25,
+    rootMargin: '0px 0px -100px 0px',
+  })
+  const { ref: pillarsRef, isInView: isPillarsInView } = useInView({
+    threshold: 0.3,
+    rootMargin: '0px 0px -120px 0px',
+  })
 
   const pillars: Array<{
     step: string
@@ -383,7 +389,7 @@ export function AboutSection() {
           <div className="lg:col-span-6 relative flex justify-center items-center">
           {/* Líneas de énfasis arriba a la izquierda — fijas apuntando a la posición final, estirándose con la animación del hero */}
           <div
-            className="pointer-events-none absolute -top-8 -left-3 sm:-top-10 sm:-left-6 lg:-top-12 lg:-left-8 z-20 text-cheesy-yellow rotate-32"
+            className="pointer-events-none absolute -top-8 left-2 sm:-top-10 sm:-left-6 lg:-top-12 lg:-left-8 z-20 text-cheesy-yellow rotate-32"
           >
             <svg
               viewBox="-5 -5 55 60"
