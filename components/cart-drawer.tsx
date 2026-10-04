@@ -207,7 +207,7 @@ export function CartDrawer({
                           value={address}
                           onChange={(e) => handleAddressChange(e.target.value)}
                           placeholder="Calle, número, depto o referencia..."
-                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-cheesy-yellow/70 focus:ring-1 focus:ring-cheesy-yellow/50 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-neutral-500 outline-none transition-all"
+                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-cheesy-yellow/70 focus:ring-1 focus:ring-cheesy-yellow/50 rounded-xl pl-9 pr-3 py-2.5 text-base sm:text-sm text-white placeholder-neutral-500 outline-none transition-all"
                         />
                       </div>
                     </div>
