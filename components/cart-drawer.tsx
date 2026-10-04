@@ -49,6 +49,16 @@ export function CartDrawer({
     } catch {}
   }, [])
 
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = originalOverflow
+      }
+    }
+  }, [isOpen])
+
   const handleAddressChange = (val: string) => {
     setAddress(val)
     try {
@@ -93,9 +103,13 @@ export function CartDrawer({
       {/* Panel lateral del carrito */}
       <aside
         aria-label="Tu pedido"
-        className={`fixed top-0 right-0 z-60 h-full w-full max-w-md bg-[#161616] border-l border-neutral-800 flex flex-col shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 z-60 h-full w-full max-w-md bg-[#161616] border-l border-neutral-800 flex flex-col shadow-2xl transition-transform duration-300 ease-out transform-gpu will-change-transform ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        style={{
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
+        }}
       >
         {/* Cabecera del carrito */}
         <div className="flex items-center justify-between p-6 border-b border-neutral-800">
@@ -208,13 +222,12 @@ export function CartDrawer({
                           id="delivery-address"
                           type="text"
                           value={address}
-                          onFocus={() => {
-                            setIsInputFocused(true)
+                          onFocus={() => setIsInputFocused(true)}
+                          onBlur={() => {
                             setTimeout(() => {
-                              inputRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-                            }, 200)
+                              setIsInputFocused(false)
+                            }, 120)
                           }}
-                          onBlur={() => setIsInputFocused(false)}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               inputRef.current?.blur()
