@@ -15,28 +15,28 @@ export default function CheesyBiteLanding() {
   const [cartOpen, setCartOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#F7F7F5] selection:bg-[#F5B900] selection:text-[#0D0D0D]">
-      {/* Sticky Header / Navbar */}
+    <div className="min-h-screen bg-cheesy-black text-cheesy-cream selection:bg-cheesy-yellow selection:text-cheesy-black">
+      {/* Encabezado fijo / Barra de navegación */}
       <Navbar cartCount={totalCartCount} onOpenCart={() => setCartOpen(true)} />
 
       <main>
-        {/* Hero Section with Mockup Composition */}
+        {/* Sección principal (Hero) con composición visual */}
         <Hero onQuickOrder={() => setCartOpen(true)} />
 
-        {/* About CheesyBite with aesthetic scroll entrance animation */}
+        {/* Sección Sobre nosotros con animación de entrada guiada por scroll */}
         <AboutSection />
 
-        {/* Brand Value Propositions */}
+        {/* Propuesta de valor y beneficios de la marca */}
         <BenefitsSection />
 
-        {/* Final Conversion Banner */}
+        {/* Banner final de conversión */}
         <FinalCTA cart={cart} onQuickOrder={() => setCartOpen(true)} />
       </main>
 
-      {/* Footer */}
+      {/* Pie de página */}
       <Footer />
 
-      {/* Slide-out Cart Drawer with WhatsApp checkout */}
+      {/* Carrito lateral desplegable con checkout por WhatsApp */}
       <CartDrawer
         items={cart}
         isOpen={cartOpen}

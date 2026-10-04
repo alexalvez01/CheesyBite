@@ -30,8 +30,8 @@ export function CategoryFilters({
             onClick={() => onSelectCategory(category)}
             className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer ${
               isActive
-                ? 'bg-[#F5B900] text-[#0D0D0D] font-display font-black shadow-md shadow-[#F5B900]/20 scale-105'
-                : 'bg-[#181818] text-[#DEDED9] border border-[#2E2E2E] hover:border-[#F5B900]/60 hover:text-white hover:bg-[#202020]'
+                ? 'bg-cheesy-yellow text-cheesy-black font-display font-black shadow-md shadow-cheesy-yellow/20 scale-105'
+                : 'bg-cheesy-card text-[#DEDED9] border border-[#2E2E2E] hover:border-cheesy-yellow/60 hover:text-white hover:bg-[#202020]'
             }`}
           >
             {category}

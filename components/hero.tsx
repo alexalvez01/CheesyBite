@@ -70,7 +70,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
       className="
         relative
         h-svh
-        min-h-[600px]
+        min-h-150
         sm:min-h-170
         max-h-250
         overflow-hidden
@@ -90,7 +90,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           className="object-cover object-bottom"
         />
 
-        {/* Scrim lateral sutil para contraste del texto sin tapar la mesa de madera */}
+        {/* Sombra lateral sutil para contraste del texto sin tapar la mesa de madera */}
         <div
           className="
             absolute
@@ -105,7 +105,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           "
         />
 
-        {/* Scrim inferior para mobile — funde la burger con la wave inferior */}
+        {/* Difuminado inferior para mobile — funde la hamburguesa con la ola inferior */}
         <div
           className="
             absolute
@@ -340,7 +340,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           <p
             className="
               mt-3
-              max-w-[280px]
+              max-w-70
               text-xs
               font-normal
               leading-relaxed
@@ -522,7 +522,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           -translate-x-1/2
           h-[43%]
           w-[95%]
-          max-w-[370px]
+          max-w-92.5
 
           sm:z-20
           sm:max-w-none

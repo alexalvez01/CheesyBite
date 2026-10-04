@@ -31,7 +31,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
   }
 
   return (
-    <section id="contacto" className="relative w-full overflow-hidden bg-[#0D0D0D] text-[#0D0D0D]">
+    <section id="contacto" className="relative w-full overflow-hidden bg-cheesy-black text-cheesy-black">
       {/* Ondulaciones orgánicas superiores con dirección ascendente en ambos bordes laterales (calcado de mockup.png) */}
       <div className="w-full overflow-hidden leading-none select-none pointer-events-none -mb-px">
         <svg
@@ -39,7 +39,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          className="w-full h-14 sm:h-20 lg:h-24 block text-[#F5B900]"
+          className="w-full h-14 sm:h-20 lg:h-24 block text-cheesy-yellow"
           aria-hidden="true"
         >
           <path
@@ -49,7 +49,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
         </svg>
       </div>
 
-      <div className="w-full bg-[#F5B900]">
+      <div className="w-full bg-cheesy-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6">
           {/* Izquierda: Logo y mascota CheesyBite */}
@@ -64,7 +64,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
               <svg
                 viewBox="0 0 54 60"
                 fill="none"
-                className="w-8 sm:w-11 h-10 sm:h-13 text-[#0D0D0D] overflow-visible"
+                className="w-8 sm:w-11 h-10 sm:h-13 text-cheesy-black overflow-visible"
                 aria-hidden="true"
               >
                 {/* Cuña superior hacia arriba-izquierda (↖) */}
@@ -104,7 +104,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
             <button
               onClick={handleAction}
               style={{ fontFamily: 'var(--font-sans), sans-serif' }}
-              className="mx-3 sm:mx-5 inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#0D0D0D] hover:bg-[#1A1A1A] text-[#F5B900] font-sans font-bold text-base sm:text-lg shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="mx-3 sm:mx-5 inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-cheesy-black hover:bg-[#1A1A1A] text-cheesy-yellow font-sans font-bold text-base sm:text-lg shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
             >
               {/* Ícono de WhatsApp integrado directamente sin padding excesivo */}
               <svg
@@ -124,7 +124,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
                 />
               </svg>
               <span className="tracking-tight">Pedir por WhatsApp</span>
-              <ArrowRight className="w-5 h-5 ml-0.5 text-[#F5B900] transition-transform duration-300 group-hover:translate-x-1.5" />
+              <ArrowRight className="w-5 h-5 ml-0.5 text-cheesy-yellow transition-transform duration-300 group-hover:translate-x-1.5" />
             </button>
 
             {/* 3 Cuñas doodle del lado derecho */}
@@ -132,7 +132,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
               <svg
                 viewBox="0 0 54 60"
                 fill="none"
-                className="w-8 sm:w-11 h-10 sm:h-13 text-[#0D0D0D] overflow-visible"
+                className="w-8 sm:w-11 h-10 sm:h-13 text-cheesy-black overflow-visible"
                 aria-hidden="true"
               >
                 {/* Cuña superior hacia arriba-derecha (↗) */}
@@ -176,7 +176,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram de CheesyBite"
-              className="w-10 h-10 rounded-full bg-[#0D0D0D] text-[#F5B900] flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
+              className="w-10 h-10 rounded-full bg-cheesy-black text-cheesy-yellow flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
             >
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -187,7 +187,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook de CheesyBite"
-              className="w-10 h-10 rounded-full bg-[#0D0D0D] text-[#F5B900] flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
+              className="w-10 h-10 rounded-full bg-cheesy-black text-cheesy-yellow flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
             >
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -198,7 +198,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
               target="_blank"
               rel="noreferrer"
               aria-label="TikTok de CheesyBite"
-              className="w-10 h-10 rounded-full bg-[#0D0D0D] text-[#F5B900] flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
+              className="w-10 h-10 rounded-full bg-cheesy-black text-cheesy-yellow flex items-center justify-center hover:scale-110 hover:bg-[#1A1A1A] active:scale-95 transition-all shadow-md"
             >
               <svg className="w-5.5 h-5.5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.04.86.12V9.42a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.68a6.34 6.34 0 0 0 10.82 4.48 6.3 6.3 0 0 0 1.87-4.49V8.62a8.2 8.2 0 0 0 4.9 1.6V6.76c-.33-.02-.67-.04-1-.07z" />
@@ -216,7 +216,7 @@ export function FinalCTA({ onQuickOrder, cart = [] }: FinalCTAProps) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          className="w-full h-8 sm:h-12 lg:h-14 block text-[#F5B900]"
+          className="w-full h-8 sm:h-12 lg:h-14 block text-cheesy-yellow"
           aria-hidden="true"
         >
           <path

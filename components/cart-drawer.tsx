@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   X,
@@ -36,6 +36,8 @@ export function CartDrawer({
   const router = useRouter()
   const [orderType, setOrderType] = useState<'delivery' | 'retirar'>('delivery')
   const [address, setAddress] = useState('')
+  const [isInputFocused, setIsInputFocused] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
   const [paymentMethod, setPaymentMethod] = useState<'Efectivo' | 'Transferencia'>('Efectivo')
   const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const totalCount = items.reduce((sum, item) => sum + item.quantity, 0)
@@ -79,7 +81,7 @@ export function CartDrawer({
 
   return (
     <>
-      {/* Backdrop overlay */}
+      {/* Telón de fondo (overlay) */}
       <div
         className={`fixed inset-0 z-60 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -88,14 +90,14 @@ export function CartDrawer({
         aria-hidden="true"
       />
 
-      {/* Drawer Panel */}
+      {/* Panel lateral del carrito */}
       <aside
         aria-label="Tu pedido"
         className={`fixed top-0 right-0 z-60 h-full w-full max-w-md bg-[#161616] border-l border-neutral-800 flex flex-col shadow-2xl transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Drawer Header */}
+        {/* Cabecera del carrito */}
         <div className="flex items-center justify-between p-6 border-b border-neutral-800">
           <div>
             <h2 className="text-2xl font-display font-black text-white flex items-center gap-2">
@@ -112,7 +114,7 @@ export function CartDrawer({
           </button>
         </div>
 
-        {/* Drawer Content */}
+        {/* Contenido del carrito */}
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center py-16">
@@ -202,13 +204,37 @@ export function CartDrawer({
                       <div className="relative flex items-center">
                         <MapPin className="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" />
                         <input
+                          ref={inputRef}
                           id="delivery-address"
                           type="text"
                           value={address}
+                          onFocus={() => {
+                            setIsInputFocused(true)
+                            setTimeout(() => {
+                              inputRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+                            }, 200)
+                          }}
+                          onBlur={() => setIsInputFocused(false)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              inputRef.current?.blur()
+                            }
+                          }}
                           onChange={(e) => handleAddressChange(e.target.value)}
                           placeholder="Calle, número, depto o referencia..."
-                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-cheesy-yellow/70 focus:ring-1 focus:ring-cheesy-yellow/50 rounded-xl pl-9 pr-3 py-2.5 text-base sm:text-sm text-white placeholder-neutral-500 outline-none transition-all"
+                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-cheesy-yellow/70 focus:ring-1 focus:ring-cheesy-yellow/50 rounded-xl pl-9 pr-16 py-2.5 text-base sm:text-sm text-white placeholder-neutral-500 outline-none transition-all"
                         />
+                        {isInputFocused && (
+                          <button
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onTouchStart={(e) => e.preventDefault()}
+                            onClick={() => inputRef.current?.blur()}
+                            className="absolute right-2 px-2.5 py-1 text-xs font-bold bg-cheesy-yellow text-cheesy-black rounded-lg sm:hidden cursor-pointer active:scale-95 transition-transform select-none"
+                          >
+                            Listo
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}
@@ -330,9 +356,13 @@ export function CartDrawer({
         )}
         </div>
 
-        {/* Drawer Footer */}
+        {/* Pie del carrito */}
         {items.length > 0 && (
-          <div className="p-6 border-t border-neutral-800 bg-neutral-900/60 space-y-4">
+          <div
+            className={`p-6 border-t border-neutral-800 bg-neutral-900/60 space-y-4 ${
+              isInputFocused ? 'hidden sm:block' : 'block'
+            }`}
+          >
             <div className="flex items-center justify-between text-base">
               <span className="text-neutral-400">Total</span>
               <span className="font-display font-black text-2xl text-cheesy-yellow">
@@ -365,7 +395,7 @@ export function CartDrawer({
                 </svg>
               </div>
 
-              {/* WhatsApp Icon */}
+              {/* Ícono de WhatsApp */}
               <svg
                 className="relative z-10 w-5 h-5 fill-current shrink-0"
                 viewBox="0 0 24 24"

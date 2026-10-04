@@ -151,7 +151,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
             <Logo variant="nav" />
           </div>
 
-          {/* Desktop Nav Links */}
+          {/* Enlaces de navegación en escritorio */}
           <nav className="relative hidden md:flex items-center gap-8 text-sm font-medium">
             {navLinks.map((link, idx) => (
               <Link
@@ -182,7 +182,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
             />
           </nav>
 
-          {/* Actions: Cart & Mobile toggle */}
+          {/* Acciones: Carrito y botón de menú mobile */}
           <div className="flex items-center gap-4">
             <button
               onClick={onOpenCart}
@@ -199,7 +199,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
               </span>
             </button>
 
-            {/* Mobile Menu Button */}
+            {/* Botón de menú mobile */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
@@ -211,7 +211,7 @@ export function Navbar({ cartCount, onOpenCart }: NavbarProps) {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Menú desplegable para mobile */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-cheesy-black/95 backdrop-blur-md px-6 py-5 shadow-2xl transition-all animate-in fade-in slide-in-from-top-4 duration-200">
           <nav className="flex flex-col gap-4 text-base font-medium">

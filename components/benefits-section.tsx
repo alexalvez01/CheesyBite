@@ -98,7 +98,7 @@ export function BenefitsSection() {
   ]
 
   return (
-    <section className="py-20 sm:py-28 border-t border-neutral-900 bg-[#0D0D0D] relative overflow-hidden">
+    <section className="py-20 sm:py-28 border-t border-neutral-900 bg-cheesy-black relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Encabezado limpio */}
         <div
@@ -108,7 +108,7 @@ export function BenefitsSection() {
           }`}
         >
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight leading-tight">
-            La diferencia de hacer una <span className="text-[#F5B900]">burger de verdad</span>
+            La diferencia de hacer una <span className="text-cheesy-yellow">burger de verdad</span>
           </h2>
         </div>
 
@@ -134,13 +134,13 @@ export function BenefitsSection() {
                   }}
                 >
                   {/* Número o métrica en tipografía display */}
-                  <span className="font-display font-black text-5xl sm:text-6xl lg:text-7xl leading-none text-[#F5B900] tracking-tight transition-transform duration-300 group-hover:scale-105">
+                  <span className="font-display font-black text-5xl sm:text-6xl lg:text-7xl leading-none text-cheesy-yellow tracking-tight transition-transform duration-300 group-hover:scale-105">
                     {item.metric}
                   </span>
 
                   {/* Gota de queso cheddar derretido pegada al número (sin corte ni overflow-hidden) */}
                   <div
-                    className="-mt-1 text-[#F5B900] overflow-visible"
+                    className="-mt-1 text-cheesy-yellow overflow-visible"
                     style={{
                       animation: isGridInView
                         ? `cheddarDripDeploy 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${item.delay + 180}ms both`
@@ -151,7 +151,7 @@ export function BenefitsSection() {
                   >
                     <svg
                       viewBox="-2 0 72 22"
-                      className="w-14 sm:w-18 h-3.5 sm:h-4.5 fill-[#F5B900] overflow-visible transition-transform duration-300 group-hover:scale-y-125 origin-top"
+                      className="w-14 sm:w-18 h-3.5 sm:h-4.5 fill-cheesy-yellow overflow-visible transition-transform duration-300 group-hover:scale-y-125 origin-top"
                       aria-hidden="true"
                     >
                       <path d="M 0 0 L 0 3 C 8 3, 10 14, 18 14 C 24 14, 28 4, 36 4 C 44 4, 48 18, 56 18 C 62 18, 64 3, 68 3 L 68 0 Z" />
@@ -169,7 +169,7 @@ export function BenefitsSection() {
                     opacity: isGridInView ? undefined : 0,
                   }}
                 >
-                  <h3 className="font-display font-bold text-lg sm:text-xl lg:text-2xl text-white uppercase tracking-wide leading-tight group-hover:text-[#F5B900] transition-colors duration-200">
+                  <h3 className="font-display font-bold text-lg sm:text-xl lg:text-2xl text-white uppercase tracking-wide leading-tight group-hover:text-cheesy-yellow transition-colors duration-200">
                     {item.title}
                   </h3>
 

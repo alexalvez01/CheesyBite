@@ -485,7 +485,7 @@ export default function MenuPage() {
                     ========================================= */}
                 <div className="hidden lg:block">
                   <div className="flex items-baseline justify-between gap-4">
-                    {/* Nombre y Badge */}
+                    {/* Nombre y etiqueta destacada */}
                     <div className="flex items-center gap-2.5 shrink-0">
                       <h2
                         className={`font-display font-bold text-2xl transition-colors ${
@@ -644,10 +644,10 @@ export default function MenuPage() {
 
       </main>
 
-      {/* Footer */}
+      {/* Pie de página */}
       <Footer />
 
-      {/* Drawer del Carrito */}
+      {/* Carrito lateral desplegable */}
       <CartDrawer
         items={cart}
         isOpen={cartOpen}
