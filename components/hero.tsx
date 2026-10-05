@@ -230,10 +230,8 @@ export function Hero({ onQuickOrder }: HeroProps) {
                   top-4.5
                   hidden
 
-                  sm:-left-10
-                  sm:block
-
-                  lg:-left-12
+                  min-[1450px]:block
+                  min-[1450px]:-left-12
                 "
               >
                 <svg
@@ -530,7 +528,7 @@ export function Hero({ onQuickOrder }: HeroProps) {
           sm:left-auto
           sm:bottom-2
           sm:right-[2%]
-          sm:h-[98%]
+          sm:h-[75%]
           sm:w-[58%]
 
           lg:h-[102%]
@@ -570,10 +568,8 @@ export function Hero({ onQuickOrder }: HeroProps) {
         className="
           pointer-events-none select-none
           absolute z-20
-          hidden sm:block
-          sm:top-[22%] sm:right-[48%]
-          lg:top-[19%] lg:right-[49%]
-          xl:top-[17%] xl:right-[48%]
+          hidden min-[1920px]:block
+          min-[1920px]:top-[17%] min-[1920px]:right-[48%]
         "
       >
         <svg
@@ -621,10 +617,8 @@ export function Hero({ onQuickOrder }: HeroProps) {
         className="
           pointer-events-none select-none animate-hero-badge
           absolute z-20
-          hidden sm:block
-          sm:top-[18%] sm:right-[8%]
-          lg:top-[16%] lg:right-[10%]
-          xl:top-[14%] xl:right-[11%]
+          hidden min-[1920px]:block
+          min-[1920px]:top-[14%] min-[1920px]:right-[11%]
         "
       >
         <div className="animate-float flex flex-col items-center">
@@ -661,11 +655,8 @@ export function Hero({ onQuickOrder }: HeroProps) {
         className="
           pointer-events-none select-none animate-hero-drops
           absolute z-40
-          hidden sm:block
-          bottom-[12%] right-[4%]
-          sm:bottom-[12%] sm:right-[5%]
-          lg:bottom-[10%] lg:right-[6%]
-          xl:bottom-[9%] xl:right-[7%]
+          hidden min-[1920px]:block
+          min-[1920px]:bottom-[9%] min-[1920px]:right-[7%]
         "
       >
         <svg
